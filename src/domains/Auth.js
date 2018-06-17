@@ -1,7 +1,8 @@
 import * as bcrypt from 'bcryptjs'
 import * as jwt from 'jsonwebtoken'
+
 /**
- * JWT secret word to generates tokens
+ * JWT secret word to generate tokens
  * @type {string}
  */
 const jwtSecret = process.env.JWT_SECRET || 'kitty-cat'
@@ -56,7 +57,7 @@ const hashPassword = password => {
  * @throws {Error} If no passowrd is given
  * @expose
  */
-const generateUserToken = _id => {
+const generateToken = _id => {
     if (!_id) return null
 
     const token = jwt.sign({ _id }, jwtSecret, { expiresIn: expiration })

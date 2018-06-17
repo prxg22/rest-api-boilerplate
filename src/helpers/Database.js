@@ -8,7 +8,6 @@ class Database {
         try {
             await mongoose.connect('mongodb://127.0.0.1:27017')
         } catch (e) {
-            console.error(e)
             throw new Error(e)
         }
 

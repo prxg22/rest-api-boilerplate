@@ -2,36 +2,21 @@ import { User } from '../database'
 import { Auth } from '../domains'
 
 const register = async data => {
-    const { username } = data
-    // search repeated username
-    let repeated
-
-    try {
-        repeated = await User.findByUsername(username)
-    } catch (e) {
-        throw e
-
-    }
-    if (repeated) throw new Error('duplicated username')
-
-
-    // salvar novo usario no banco
+    const { username, password } = data
     let user = null
 
+    // Hash password
     try {
-        user = await User.create(data)
+        const hashedPassword = await Auth.hashPassword(password)
 
-        // chamar metodo de Auth que cria API_TOKEN a partir do id gerado
-        const token = Auth.generateUserToken(user._id)
+        // search repeated username
+        const repeated = await User.findByUsername(username)
 
-        // se não gerar token, deletar usuário
-        if (!token) {
-            await user.remove()
-            return
-        }
+        if (repeated) throw new Error('duplicated username')
 
-        user.token = token
-        await user.save()
+        // salvar novo usario no banco
+        user = await User.create({ username, password: hashPassword })
+
     } catch (e) {
         throw e
     }
