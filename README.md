@@ -1,2 +1,18 @@
-# taquibras-api
-Taquibras ERP API
+# rest-api-boilerplate
+Node + Express API with JWT auth module
+
+## Quickstart
+  - Clone this repository
+  ```
+    $ git clone https://github.com/prxg22/rest-api-boilerplate.git
+  ```
+
+  - Install dependencies
+  ```
+    $ npm i
+  ```
+
+  - Start project
+  ```
+    $ npm start
+  ```
