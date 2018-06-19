@@ -1,7 +1,7 @@
 {
-  "name": "taquibras-api",
+  "name": "rest-api-boilerplate",
   "version": "1.0.0",
-  "description": "Taquibras ERP API",
+  "description": "Node + Express REST API",
   "main": "index.js",
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -30,12 +30,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/prxg22/taquibras.git"
+    "url": "git+https://github.com/prxg22/rest-api-boilerplate.git"
   },
   "author": "prxg22",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/prxg22/taquibras/issues"
+    "url": "https://github.com/prxg22/rest-api-boilerplate/issues"
   },
-  "homepage": "https://github.com/prxg22/taquibras#readme"
+  "homepage": "https://github.com/prxg22/rest-api-boilerplate#readme"
 }
