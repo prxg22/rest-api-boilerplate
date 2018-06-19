@@ -1,4 +1,5 @@
 import { User, Auth } from '../domains'
+import { APIError } from '../helpers/Error'
 
 /**
  * User registration route
@@ -7,26 +8,27 @@ import { User, Auth } from '../domains'
  * @param {express.Response} res Express http response
  * @param {express.Next} next Express next function
  * @return {void}
- * @throws {Error} If user saving operation doesn't work
  * @expose
  */
 const register = async (req, res, next) => {
     const { body } = req
     // Check username and password
-    if (!body || !body.username || !body.password) res.sendStatus(400)
 
 
     // Call user domain register function
-    let user = null
 
     try {
+        if (!body || !body.username || !body.password) throw new APIError('CREDENTIALS_NOT_VALID')
+
+        let user = null
         user = await User.register(body)
+
+        return res.send(user)
     } catch (e) {
         return next(e)
     }
 
     // Send user object
-    return res.send(user)
 }
 
 /**
@@ -36,7 +38,6 @@ const register = async (req, res, next) => {
  * @param {express.Response} res Express http response
  * @param {express.Next} next Express next function
  * @return {void}
- * @throws {Error} If user saving operation doesn't work
  * @expose
  */
 const login = async (req, res, next) => {

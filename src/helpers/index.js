@@ -1,4 +1,4 @@
 import Database from './Database'
-import ErrorHandler from './ErrorHandler'
+import APIError from './Error'
 
-export { Database, ErrorHandler }
+export { Database, APIError }

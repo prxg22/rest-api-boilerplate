@@ -1,7 +1,8 @@
 import express from 'express'
 import bodyparser from 'body-parser'
 
-import { Database as database, ErrorHandler } from './helpers'
+import { Database as database } from './helpers'
+import { ErrorHandler } from './helpers/Error'
 import routes from './routes'
 
 const app = express()

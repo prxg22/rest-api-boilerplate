@@ -49,6 +49,14 @@ const hashPassword = password => {
     return hash
 }
 
+/**
+ * Returns true/false if password is equal the hashed.
+ * @function
+ * @param {string} password Password to be checked
+ * @param {string} hashed Hasehd password
+ * @returns {boolean}
+ * @expose
+ */
 const comparePassword = async (password, hashed) => {
     if (!password || !hashed) return false
 
@@ -60,31 +68,52 @@ const comparePassword = async (password, hashed) => {
 }
 
 /**
- * Generates JWT token from user id
+ * Generates JWT token from obj
  * @function
- * @param {string} _id User's id
+ * @param {string} obj Object to be transported
  * @returns {string} JWT token
- * @throws {Error} If no passowrd is given
  * @expose
  */
-const authenticate = _id => {
-    if (!_id) return null
+const authenticate = obj => {
+    if (!obj) return null
 
-    const token = jwt.sign({ _id }, jwtSecret, { expiresIn: expiration })
+    const token = jwt.sign({ obj }, jwtSecret, { expiresIn: expiration })
 
     return token
 }
 
-
+/**
+ * Checks if token is valid and returns stored object
+ * @function
+ * @param {string} password Password to be checked
+ * @param {string} hashed Hasehd password
+ * @returns {boolean|Object}
+ * @expose
+ */
 const authorize = token => {
     if (!token) return false
     return jwt.verify(token, jwtSecret)
 }
 
+/**
+ * Checks if token is valid and returns stored object
+ * @function
+ * @param {express.Request} req Express http request
+ * @param {express.Response} res Express http response
+ * @param {express.Next} next Express next function
+ * @return {void}
+ * @expose
+ */
 const authorizeMiddleware = (req, res, next) => {
     const token = req.headers['x-taquibras-token']
-    const user = authorize(token)
-    if (!token || !user) res.sendStatus(401)
+
+    try {
+        const user = authorize(token)
+    } catch(e) {
+        return res.sendStatus(401)
+    }
+
+    if (!token || !user) return res.sendStatus(401)
 
     req.user = user
     next()

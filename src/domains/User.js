@@ -1,8 +1,15 @@
 import { User } from '../database'
 import { Auth } from '../domains'
+import { APIError } from '../helpers/Error'
 
-// $2a$12$IGjsaTLaP/c0z8Mm1P21/.xgwLLsvmqAZn7DWZmy4HC3sd2Gc.UqW
-
+/**
+ * Creates user and return it
+ * @function
+ * @param {Object} data
+ * @return {UserModel}
+ * @throws {APIError} if username has already been used
+ * @expose
+ */
 const register = async data => {
     const { username, password } = data
     let user = null
@@ -14,8 +21,7 @@ const register = async data => {
         // search repeated username
         const repeated = await User.findByUsername(username)
 
-        console.log(repeated)
-        if (repeated) throw new Error('duplicated username')
+        if (repeated) throw new APIError('DUPLICATED_USER')
 
         // salvar novo usario no banco
         user = await User.create({
@@ -30,6 +36,15 @@ const register = async data => {
     return user
 }
 
+/**
+ * Authenticates user and returns JWT token which should be
+ * transported in future requests
+ * @function
+ * @param {Object} data
+ * @return {UserModel}
+ * @throws {APIError} if username has already been used
+ * @expose
+ */
 const authenticate = async data => {
     const { username, password } = data
 
