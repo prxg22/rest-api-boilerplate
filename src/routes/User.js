@@ -43,8 +43,8 @@ const login = async (req, res, next) => {
     const { body } = req
     try {
         if (!body || !body.username || !body.password) res.sendStatus(400)
-        const token = User.auth()
-        res.session.set('token', token)
+        const token = await User.authenticate(body)
+        res.send(token)
     } catch(e) {
         next(e)
     }
@@ -53,6 +53,11 @@ const login = async (req, res, next) => {
 export default router => {
     router.route('/user')
         .post(register)
+        .get(Auth.authorizeMiddleware, (req, res, next) => {
+            res.send(req.user)
+        })
+
+    router.route('/user/login')
         .post(login)
 
     return router

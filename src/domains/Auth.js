@@ -49,6 +49,16 @@ const hashPassword = password => {
     return hash
 }
 
+const comparePassword = async (password, hashed) => {
+    if (!password || !hashed) return false
+
+    try {
+        return await bcrypt.compare(password, hashed)
+    } catch (e) {
+        throw e
+    }
+}
+
 /**
  * Generates JWT token from user id
  * @function
@@ -57,7 +67,7 @@ const hashPassword = password => {
  * @throws {Error} If no passowrd is given
  * @expose
  */
-const generateToken = _id => {
+const authenticate = _id => {
     if (!_id) return null
 
     const token = jwt.sign({ _id }, jwtSecret, { expiresIn: expiration })
@@ -65,7 +75,25 @@ const generateToken = _id => {
     return token
 }
 
+
+const authorize = token => {
+    if (!token) return false
+    return jwt.verify(token, jwtSecret)
+}
+
+const authorizeMiddleware = (req, res, next) => {
+    const token = req.headers['x-taquibras-token']
+    const user = authorize(token)
+    if (!token || !user) res.sendStatus(401)
+
+    req.user = user
+    next()
+}
+
 export default {
+    comparePassword,
     hashPassword,
-    generateUserToken,
+    authenticate,
+    authorize,
+    authorizeMiddleware,
 }
