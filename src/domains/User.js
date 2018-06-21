@@ -1,6 +1,6 @@
 import { User } from '../database'
 import { Auth } from '../domains'
-import { APIError } from '../helpers/Error'
+import APIError from '../lib/APIError'
 
 /**
  * Creates user and return it
@@ -12,6 +12,7 @@ import { APIError } from '../helpers/Error'
  */
 const register = async data => {
     const { username, password } = data
+
     let user = null
 
     // Hash password
@@ -49,11 +50,11 @@ const authenticate = async data => {
     const { username, password } = data
 
     try {
-        if (!username || !password) throw new Error('username and password needed')
+        if (!username || !password) throw new APIError('CREDENTIALS_NOT_VALID')
 
         const user = await User.findByUsername(username)
-        if (!user) throw new Error('user not found')
-        if (!Auth.comparePassword(password, user.password)) throw new Error('wrong password')
+        if (!user) throw new APIError('CREDENTIALS_NOT_VALID')
+        if (!Auth.comparePassword(password, user.password)) throw new APIError('CREDENTIALS_NOT_VALID')
 
         return Auth.authenticate(user)
     } catch (e) {

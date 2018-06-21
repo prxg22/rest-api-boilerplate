@@ -1,5 +1,5 @@
 import { User, Auth } from '../domains'
-import { APIError } from '../helpers/Error'
+import APIError from '../lib/APIError'
 
 /**
  * User registration route
@@ -16,7 +16,6 @@ const register = async (req, res, next) => {
 
 
     // Call user domain register function
-
     try {
         if (!body || !body.username || !body.password) throw new APIError('CREDENTIALS_NOT_VALID')
 

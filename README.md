@@ -17,7 +17,7 @@ Node + Express API with JWT auth module
     $ npm start
   ```
 
-# API Reference
+## API Reference
   ## Constants
 
 <dl>
@@ -101,7 +101,7 @@ Hash password
 **Returns**: <code>string</code> - hashed password  
 **Throws**:
 
-- <code>Error</code> If no passowrd is given
+- <code>APIError</code> If no passowrd is given
 
 **Expose**:   
 
@@ -176,7 +176,7 @@ Creates user and return it
 
 | Param | Type |
 | --- | --- |
-| data | <code>Object</code> |
+| data | <code>Object</code> | 
 
 <a name="authenticate"></a>
 
@@ -193,7 +193,7 @@ transported in future requests
 
 | Param | Type |
 | --- | --- |
-| data | <code>Object</code> |
+| data | <code>Object</code> | 
 
 <a name="register"></a>
 
@@ -222,3 +222,4 @@ User logins route
 | req | <code>express.Request</code> | Express http request |
 | res | <code>express.Response</code> | Express http response |
 | next | <code>express.Next</code> | Express next function |
+

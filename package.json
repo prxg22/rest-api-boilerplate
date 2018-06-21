@@ -27,7 +27,7 @@
     "babel": "babel src --out-dir dist",
     "build": "npm run clean && npm run babel",
     "clean": "rm -rf node-modules",
-    "doc": "jsdoc2md -t config/jsdoc2md/README.hbs src/**/*.js > README.md; echo",
+    "docs": "jsdoc2md -t config/jsdoc2md/README.hbs src/**/*.js > README.md; echo",
     "lint": "eslint --ignore-pattern '!.gitignore' .",
     "lint:fix": "eslint --fix --ignore-pattern '!.gitignore' .",
     "start": "PORT=3030 nodemon src/ --exec babel-node",

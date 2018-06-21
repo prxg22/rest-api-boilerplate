@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcryptjs'
 import * as jwt from 'jsonwebtoken'
 
+import APIError from '../lib/APIError'
 /**
  * JWT secret word to generate tokens
  * @type {string}
@@ -30,23 +31,20 @@ const passwordLength = 8
  * @function
  * @param {string} password Password to be hashed
  * @returns {string} hashed password
- * @throws {Error} If no passowrd is given
+ * @throws {APIError} If no passowrd is given
  * @expose
  */
 const hashPassword = password => {
-    // validate password
-    if (!password || password.length < passwordLength) throw new Error('Password not valid!')
-
-    let hash
-
-    // hash password with bcryptjs
     try {
+        // validate password
+        if (!password || password.length < passwordLength) throw new APIError('CREDENTIALS_NOT_VALID')
+        let hash
+        // hash password with bcryptjs
         hash = bcrypt.hash(password, saltRounds)
+        return hash
     } catch (e) {
         throw e
     }
-
-    return hash
 }
 
 /**
