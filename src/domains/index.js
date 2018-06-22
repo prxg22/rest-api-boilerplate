@@ -1,4 +1,4 @@
-import User from './User'
-import Auth from './Auth'
+import User from './User';
+import Auth from './Auth';
 
-export { User, Auth }
+export { User, Auth };

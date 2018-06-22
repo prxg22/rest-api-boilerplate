@@ -1,11 +1,9 @@
 /**
+ * @module libs/APIError
  * @author Paulo Ricardo Xavier Giusti
  */
 import * as fs from 'fs'
 
-/**
- * @module APIError
- */
 
 /**
  * API error description type
@@ -24,12 +22,12 @@ let APIErrorsMap = []
 /**
  * Represents an API error with HTTP status code
  * @class
- * @alias: APIError
+ * @alias module:libs/APIError
  * @extends Error
  */
 class APIError extends Error {
     /**
-     * @param {string} label
+     * @param {string} label Label to be found on {@link APIErrorsMap}
      */
     constructor(label) {
         let apiError = APIErrorsMap[label]
@@ -42,9 +40,9 @@ class APIError extends Error {
     /**
      * Error handler middleware
      * @param {APIError|Error} error
-     * @param {express.Request} req
-     * @param {express.Response} res
-     * @param {express.Next} next
+     * @param {Express.Request} req
+     * @param {Express.Response} res
+     * @param {Express.Next} [next]
      * @static
      */
     static errorHandler = (error, req, res, next) => {
@@ -56,8 +54,8 @@ class APIError extends Error {
     }
 
     /**
-     * Opens file in `path` and stores array of `APIErrorDescription`
-     * @param {string} path path to json document which contain the `APIErrorDescription` array
+     * Opens file in `path` and stores an array of {@link APIErrorDescription}
+     * @param {string} path path to JSON document which contain the {@link APIErrorDescription} array
      * @static
      */
     static setAPIErrors = (path) => {

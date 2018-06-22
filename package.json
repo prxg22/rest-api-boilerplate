@@ -14,10 +14,11 @@
   "devDependencies": {
     "babel-cli": "~6.26.0",
     "babel-plugin-transform-class-properties": "~6.24.1",
-    "babel-plugin-transform-runtime": "~6.23.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "~1.7.0",
     "chai": "~4.1.2",
     "eslint": "~4.19.1",
+    "eslint-plugin-babel": "^5.1.0",
     "jsdoc": "~3.5.5",
     "jsdoc-to-markdown": "^4.0.1",
     "mocha": "~5.2.0",
@@ -27,12 +28,13 @@
     "babel": "babel src --out-dir dist",
     "build": "npm run clean && npm run babel",
     "clean": "rm -rf node-modules",
-    "docs": "jsdoc2md -t config/jsdoc2md/README.hbs src/**/*.js > README.md; echo",
-    "lint": "eslint --ignore-pattern '!.gitignore' .",
-    "lint:fix": "eslint --fix --ignore-pattern '!.gitignore' .",
+    "docs": "jsdoc2md --private -t config/jsdoc2md/README.hbs src/**/**/**/*.js > README.md; echo",
+    "lint": "eslint src/",
+    "lint:fix": "eslint --fix src/",
     "start": "PORT=3030 nodemon src/ --exec babel-node",
     "serve": "PORT=8080 node dist/index.js",
-    "test": "mocha --compilers js:babel-register"
+    "test": "mocha --compilers js:babel-register test/**/*.js",
+    "test:watch": "mocha --compilers js:babel-register test/**/*.js --watch"
   },
   "repository": {
     "type": "git",

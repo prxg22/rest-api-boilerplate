@@ -18,7 +18,20 @@ Node + Express API with JWT auth module
   ```
 
 ## API Reference
-  ## Constants
+  ## Modules
+
+<dl>
+<dt><a href="#module_API">API</a></dt>
+<dd></dd>
+<dt><a href="#module_libs/APIError">libs/APIError</a></dt>
+<dd></dd>
+<dt><a href="#module_libs/Route">libs/Route</a></dt>
+<dd></dd>
+<dt><a href="#Route.module_User">User</a></dt>
+<dd></dd>
+</dl>
+
+## Constants
 
 <dl>
 <dt><a href="#jwtSecret">jwtSecret</a> : <code>string</code></dt>
@@ -60,13 +73,230 @@ Node + Express API with JWT auth module
 <dd><p>Authenticates user and returns JWT token which should be
 transported in future requests</p>
 </dd>
-<dt><a href="#register">register(req, res, next)</a> ⇒ <code>void</code></dt>
-<dd><p>User registration route</p>
-</dd>
-<dt><a href="#login">login(req, res, next)</a> ⇒ <code>void</code></dt>
-<dd><p>User logins route</p>
-</dd>
 </dl>
+
+<a name="module_API"></a>
+
+## API
+**Author**: Paulo Ricardo Xavier Giusti  
+<a name="external_Express"></a>
+
+### API~Express
+The Express namespace.
+
+**Kind**: inner external of [<code>API</code>](#module_API)  
+**See**: [Express](https://github.com/expressjs/express)  
+<a name="module_libs/APIError"></a>
+
+## libs/APIError
+**Author**: Paulo Ricardo Xavier Giusti  
+
+* [libs/APIError](#module_libs/APIError)
+    * [APIError](#exp_module_libs/APIError--APIError) ⇐ <code>Error</code> ⏏
+        * [new APIError(label)](#new_module_libs/APIError--APIError_new)
+        * _instance_
+            * [.errorHandler](#module_libs/APIError--APIError+errorHandler)
+            * [.setAPIErrors](#module_libs/APIError--APIError+setAPIErrors)
+        * _inner_
+            * [~APIErrorsMap](#module_libs/APIError--APIError..APIErrorsMap) : <code>Array.&lt;APIErrorDescription&gt;</code> ℗
+            * [~APIErrorDescription](#module_libs/APIError--APIError..APIErrorDescription) : <code>Object</code>
+
+<a name="exp_module_libs/APIError--APIError"></a>
+
+### APIError ⇐ <code>Error</code> ⏏
+Represents an API error with HTTP status code
+
+**Kind**: Exported class  
+**Extends**: <code>Error</code>  
+<a name="new_module_libs/APIError--APIError_new"></a>
+
+#### new APIError(label)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| label | <code>string</code> | Label to be found on [APIErrorsMap](APIErrorsMap) |
+
+<a name="module_libs/APIError--APIError+errorHandler"></a>
+
+#### apiError.errorHandler
+Error handler middleware
+
+**Kind**: instance property of [<code>APIError</code>](#exp_module_libs/APIError--APIError)  
+
+| Param | Type |
+| --- | --- |
+| error | <code>APIError</code> \| <code>Error</code> | 
+| req | <code>Express.Request</code> | 
+| res | <code>Express.Response</code> | 
+| [next] | <code>Express.Next</code> | 
+
+<a name="module_libs/APIError--APIError+setAPIErrors"></a>
+
+#### apiError.setAPIErrors
+Opens file in `path` and stores an array of [APIErrorDescription](APIErrorDescription)
+
+**Kind**: instance property of [<code>APIError</code>](#exp_module_libs/APIError--APIError)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | path to JSON document which contain the [APIErrorDescription](APIErrorDescription) array |
+
+<a name="module_libs/APIError--APIError..APIErrorsMap"></a>
+
+#### APIError~APIErrorsMap : <code>Array.&lt;APIErrorDescription&gt;</code> ℗
+Array of objects
+
+**Kind**: inner property of [<code>APIError</code>](#exp_module_libs/APIError--APIError)  
+**Access**: private  
+<a name="module_libs/APIError--APIError..APIErrorDescription"></a>
+
+#### APIError~APIErrorDescription : <code>Object</code>
+API error description type
+
+**Kind**: inner typedef of [<code>APIError</code>](#exp_module_libs/APIError--APIError)  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| msg | <code>string</code> | Error msg |
+| httpCode | <code>number</code> | Response HTTP status code |
+
+<a name="module_libs/Route"></a>
+
+## libs/Route
+**Author**: Paulo Ricardo Xavier Giusti  
+
+* [libs/Route](#module_libs/Route)
+    * [Route](#exp_module_libs/Route--Route) ⏏
+        * [new Route(router)](#new_module_libs/Route--Route_new)
+        * _instance_
+            * [.init()](#module_libs/Route--Route+init) ⇒ <code>void</code>
+        * _inner_
+            * [~setRoute(baseRoute, router, routeDescription)](#module_libs/Route--Route..setRoute) ⇒ <code>void</code> ℗
+            * [~setActions(router, actionDescription)](#module_libs/Route--Route..setActions) ⇒ <code>void</code> ℗
+            * [~setAction(router, action)](#module_libs/Route--Route..setAction) ⇒ <code>void</code> ℗
+            * [~ActionDescription](#module_libs/Route--Route..ActionDescription)
+            * [~RouteDescription](#module_libs/Route--Route..RouteDescription)
+
+<a name="exp_module_libs/Route--Route"></a>
+
+### Route ⏏
+Describes API route.
+You should not instaciate this class. It should be extended by your routes.
+
+**Kind**: Exported class  
+<a name="new_module_libs/Route--Route_new"></a>
+
+#### new Route(router)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| router | <code>external:Express#Router</code> | router in which route will be used |
+
+<a name="module_libs/Route--Route+init"></a>
+
+#### route.init() ⇒ <code>void</code>
+Set route actions on router
+
+**Kind**: instance method of [<code>Route</code>](#exp_module_libs/Route--Route)  
+<a name="module_libs/Route--Route..setRoute"></a>
+
+#### Route~setRoute(baseRoute, router, routeDescription) ⇒ <code>void</code> ℗
+Set a route on router
+
+**Kind**: inner method of [<code>Route</code>](#exp_module_libs/Route--Route)  
+**Access**: private  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| baseRoute | <code>String</code> | Route's base path |
+| router | <code>external:Express#Router</code> | API router |
+| routeDescription | <code>RouteDescription</code> | [RouteDescription](RouteDescription) |
+
+<a name="module_libs/Route--Route..setActions"></a>
+
+#### Route~setActions(router, actionDescription) ⇒ <code>void</code> ℗
+Set a route on router
+
+**Kind**: inner method of [<code>Route</code>](#exp_module_libs/Route--Route)  
+**Access**: private  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| router | <code>external:Express#Router</code> | API router |
+| actionDescription | <code>ActionDescription</code> | [ActionDescription](ActionDescription) |
+
+<a name="module_libs/Route--Route..setAction"></a>
+
+#### Route~setAction(router, action) ⇒ <code>void</code> ℗
+Set a route on router
+
+**Kind**: inner method of [<code>Route</code>](#exp_module_libs/Route--Route)  
+**Access**: private  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| router | <code>external:Express#Router</code> | API router |
+| action | <code>external:Express#Middleware</code> \| <code>Array.&lt;external:Express#Middleware&gt;</code> |  |
+
+<a name="module_libs/Route--Route..ActionDescription"></a>
+
+#### Route~ActionDescription
+Describes an route action
+
+**Kind**: inner typedef of [<code>Route</code>](#exp_module_libs/Route--Route)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| <HTTP_METHOD> | <code>String</code> | Action HTTP method |
+| action | <code>external:Express#Middleware</code> \| <code>Array.&lt;external:Express#Middleware&gt;</code> | Array of or callback to be called on route |
+
+<a name="module_libs/Route--Route..RouteDescription"></a>
+
+#### Route~RouteDescription
+Describes a route with your methods and actions
+
+**Kind**: inner typedef of [<code>Route</code>](#exp_module_libs/Route--Route)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| <ROUTE_PATH> | <code>String</code> | Route path with paramaters |
+| actionDescription | <code>ActionDescription</code> |  |
+
+<a name="Route.module_User"></a>
+
+## User
+**Author**: Paulo Ricardo Xavier Giusti  
+
+* [User](#Route.module_User)
+    * [~register(req, res, next)](#Route.module_User..register) ⇒ <code>void</code>
+    * [~login(req, res, next)](#Route.module_User..login) ⇒ <code>void</code>
+
+<a name="Route.module_User..register"></a>
+
+### User~register(req, res, next) ⇒ <code>void</code>
+User registration route
+
+**Kind**: inner method of [<code>User</code>](#Route.module_User)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| req | <code>express.Request</code> | Express http request |
+| res | <code>express.Response</code> | Express http response |
+| next | <code>express.Next</code> | Express next function |
+
+<a name="Route.module_User..login"></a>
+
+### User~login(req, res, next) ⇒ <code>void</code>
+User logins route
+
+**Kind**: inner method of [<code>User</code>](#Route.module_User)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| req | <code>express.Request</code> | Express http request |
+| res | <code>express.Response</code> | Express http response |
+| next | <code>express.Next</code> | Express next function |
 
 <a name="jwtSecret"></a>
 
@@ -194,32 +424,4 @@ transported in future requests
 | Param | Type |
 | --- | --- |
 | data | <code>Object</code> | 
-
-<a name="register"></a>
-
-## register(req, res, next) ⇒ <code>void</code>
-User registration route
-
-**Kind**: global function  
-**Expose**:   
-
-| Param | Type | Description |
-| --- | --- | --- |
-| req | <code>express.Request</code> | Express http request |
-| res | <code>express.Response</code> | Express http response |
-| next | <code>express.Next</code> | Express next function |
-
-<a name="login"></a>
-
-## login(req, res, next) ⇒ <code>void</code>
-User logins route
-
-**Kind**: global function  
-**Expose**:   
-
-| Param | Type | Description |
-| --- | --- | --- |
-| req | <code>express.Request</code> | Express http request |
-| res | <code>express.Response</code> | Express http response |
-| next | <code>express.Next</code> | Express next function |
 

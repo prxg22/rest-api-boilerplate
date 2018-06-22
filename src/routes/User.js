@@ -1,5 +1,32 @@
-import { User, Auth } from '../domains'
+/**
+ * @module Route.User
+ * @author Paulo Ricardo Xavier Giusti
+ */
+
+import { User as UserDomain, Auth } from '../domains'
 import APIError from '../lib/APIError'
+import Route from '../lib/Route'
+
+/**
+* User route
+* @class
+* @alias modRoute.User
+*/
+class User extends Route {
+    route = '/user'
+    actions = {
+        '/' : {
+            post: register,
+            get: [
+                Auth.authorizeMiddleware,
+                (req, res, next) => res.send(req.user)
+            ]
+        },
+        '/login': {
+            post: login,
+        }
+    }
+}
 
 /**
  * User registration route
@@ -8,7 +35,7 @@ import APIError from '../lib/APIError'
  * @param {express.Response} res Express http response
  * @param {express.Next} next Express next function
  * @return {void}
- * @expose
+ * @inner
  */
 const register = async (req, res, next) => {
     const { body } = req
@@ -20,7 +47,7 @@ const register = async (req, res, next) => {
         if (!body || !body.username || !body.password) throw new APIError('CREDENTIALS_NOT_VALID')
 
         let user = null
-        user = await User.register(body)
+        user = await UserDomain.register(body)
 
         return res.send(user)
     } catch (e) {
@@ -37,28 +64,17 @@ const register = async (req, res, next) => {
  * @param {express.Response} res Express http response
  * @param {express.Next} next Express next function
  * @return {void}
- * @expose
+ * @inner
  */
 const login = async (req, res, next) => {
     const { body } = req
     try {
         if (!body || !body.username || !body.password) res.sendStatus(400)
-        const token = await User.authenticate(body)
+        const token = await UserDomain.authenticate(body)
         res.send(token)
     } catch(e) {
         next(e)
     }
 }
 
-export default router => {
-    router.route('/user')
-        .post(register)
-        .get(Auth.authorizeMiddleware, (req, res, next) => {
-            res.send(req.user)
-        })
-
-    router.route('/user/login')
-        .post(login)
-
-    return router
-}
+export default User

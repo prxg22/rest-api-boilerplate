@@ -2,6 +2,8 @@ env:
   es6: true
   node: true
 extends: 'eslint:recommended'
+plugins:
+  - babel
 parserOptions:
   ecmaVersion: 2017
   ecmaFeatures:
@@ -21,6 +23,7 @@ rules:
     - error
     - after: true
       before: true
+  babel/semi: 1
   block-scoped-var: error
   block-spacing: error
   brace-style: error

@@ -1,30 +1,31 @@
-import * as bcrypt from 'bcryptjs'
-import * as jwt from 'jsonwebtoken'
+import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
 
-import APIError from '../lib/APIError'
+import APIError from '../lib/APIError';
+
 /**
  * JWT secret word to generate tokens
  * @type {string}
  */
-const jwtSecret = process.env.JWT_SECRET || 'kitty-cat'
+const jwtSecret = process.env.JWT_SECRET || 'kitty-cat';
 
 /**
  * Expiration time to tokens
  * @type {number}
  */
-const expiration = 86400 // 24h
+const expiration = 86400; // 24h
 
 /**
- * bcrypt salt rounds for password and tokens generation
+ * Bcrypt salt rounds for password and tokens generation
  * @type {number}
  */
-const saltRounds = 12
+const saltRounds = 12;
 
 /**
- * min password length
+ * Min password length
  * @type {number}
  */
-const passwordLength = 8
+const passwordLength = 8;
 
 /**
  * Hash password
@@ -36,16 +37,17 @@ const passwordLength = 8
  */
 const hashPassword = password => {
     try {
-        // validate password
-        if (!password || password.length < passwordLength) throw new APIError('CREDENTIALS_NOT_VALID')
-        let hash
-        // hash password with bcryptjs
-        hash = bcrypt.hash(password, saltRounds)
-        return hash
+        // Validate password
+        if (!password || password.length < passwordLength) throw new APIError('CREDENTIALS_NOT_VALID');
+        let hash;
+        // Hash password with bcryptjs
+
+        hash = bcrypt.hash(password, saltRounds);
+        return hash;
     } catch (e) {
-        throw e
+        throw e;
     }
-}
+};
 
 /**
  * Returns true/false if password is equal the hashed.
@@ -56,14 +58,14 @@ const hashPassword = password => {
  * @expose
  */
 const comparePassword = async (password, hashed) => {
-    if (!password || !hashed) return false
+    if (!password || !hashed) return false;
 
     try {
-        return await bcrypt.compare(password, hashed)
+        return await bcrypt.compare(password, hashed);
     } catch (e) {
-        throw e
+        throw e;
     }
-}
+};
 
 /**
  * Generates JWT token from obj
@@ -73,12 +75,12 @@ const comparePassword = async (password, hashed) => {
  * @expose
  */
 const authenticate = obj => {
-    if (!obj) return null
+    if (!obj) return null;
 
-    const token = jwt.sign({ obj }, jwtSecret, { expiresIn: expiration })
+    const token = jwt.sign({ obj }, jwtSecret, { expiresIn: expiration });
 
-    return token
-}
+    return token;
+};
 
 /**
  * Checks if token is valid and returns stored object
@@ -89,9 +91,9 @@ const authenticate = obj => {
  * @expose
  */
 const authorize = token => {
-    if (!token) return false
-    return jwt.verify(token, jwtSecret)
-}
+    if (!token) return false;
+    return jwt.verify(token, jwtSecret);
+};
 
 /**
  * Checks if token is valid and returns stored object
@@ -103,24 +105,26 @@ const authorize = token => {
  * @expose
  */
 const authorizeMiddleware = (req, res, next) => {
-    const token = req.headers['x-taquibras-token']
+    const token = req.headers['x-taquibras-token'];
 
     try {
-        const user = authorize(token)
-    } catch(e) {
-        return res.sendStatus(401)
+        const user = authorize(token);
+
+        if (!token || !user) return res.sendStatus(401);
+
+        req.user = user;
+
+        next();
+    } catch (e) {
+        return res.sendStatus(401);
     }
 
-    if (!token || !user) return res.sendStatus(401)
-
-    req.user = user
-    next()
-}
+};
 
 export default {
     comparePassword,
     hashPassword,
     authenticate,
     authorize,
-    authorizeMiddleware,
-}
+    authorizeMiddleware
+};
